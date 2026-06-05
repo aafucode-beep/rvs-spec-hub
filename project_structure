@@ -1,0 +1,19 @@
+spec_generator/
+├── app.py
+├── pdf_generator.py            # 残留空壳，已弃用
+├── templates/
+│   └── index.html              # 规格书页面（HTML 主体）
+├── static/
+│   ├── css/
+│   │   ├── spec-editor.css     # 编辑器样式
+│   │   └── print.css           # @media print 打印样式
+│   ├── js/
+│   │   ├── app.js              # 主入口：DOMContentLoaded、事件绑定
+│   │   └── image.js            # 图片压缩 + 上传处理
+│   └── images/
+│       └── logo.png
+├── uploads/                    # 上传测试用图（建议 .gitignore）
+├── vercel.json
+├── zeabur.json
+├── Procfile
+└── requirements.txt

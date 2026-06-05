@@ -1,0 +1,748 @@
+/* 页面基础样式 */
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: "Microsoft YaHei", sans-serif;
+    background: #f0f0f0;
+    min-height: 100vh;
+    overflow-y: scroll;  /* 始终显示滚动条，防止页面跳动 */
+}
+
+/* A4 页面容器 */
+.preview-page {
+    position: relative;
+    margin: 0 auto;
+    padding: 20mm;
+    width: 210mm;
+    height: 297mm;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateZ(0);  /* 创建新的堆叠上下文 */
+}
+
+/* 防止按钮导致页面重排 */
+.preview-page::after {
+    content: '';
+    display: block;
+    height: 120px;  /* 预留按钮空间 */
+    width: 100%;
+}
+
+/* 页眉部分优化 */
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9mm;
+    align-items: flex-start;
+    padding-bottom: 10px;
+    margin-top: 0;
+    border-bottom: 1px solid #f0f0f0;
+    padding-top: 2mm;
+    width: 170mm;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title-area {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: -8mm;
+    padding-top: 0;
+    width: 200px;  /* 确保与LOGO区域宽度一致 */
+}
+
+.header-input {
+    font-size: 15px;
+    color: #333;
+    border: 1px solid transparent;
+    width: 200px;
+    padding: 0;
+    transition: border-color 0.2s;
+}
+
+.header-input.brand {
+    font-weight: bold;
+}
+
+.product-title:focus,
+.product-brand:focus,
+.product-model:focus,
+.product-description textarea:focus,
+.params-table input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+    background-color: #fff;
+}
+
+.product-title:hover,
+.product-brand:hover,
+.product-model:hover,
+.product-description textarea:hover,
+.params-table input:hover {
+    border-color: #e0e0e0;
+    background-color: #fafafa;
+}
+
+/* LOGO 区域优化 */
+.logo-area {
+    width: 200px;
+    margin-top: -8mm;  /* 向上移动LOGO */
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    cursor: pointer;
+    position: relative;
+    transition: opacity 0.2s;
+    padding-right: 0;
+}
+
+.logo-area:hover {
+    opacity: 0.8;
+}
+
+.logo-area input[type="file"] {
+    display: none;
+}
+
+.logo-area img {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    max-width: 100%;
+    transition: transform 0.2s;
+    margin-top: -2mm;  /* 微调图片位置 */
+}
+
+.logo-area:hover img {
+    transform: scale(1.02);
+}
+
+.logo-area::after {
+    content: '点击更换LOGO';
+    position: absolute;
+    bottom: -15px;
+    right: 0;
+    font-size: 11px;
+    color: #999;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.logo-area:hover::after {
+    opacity: 1;
+}
+
+/* 主要内容区域 */
+.preview-content {
+    display: flex;
+    gap: 15mm;
+}
+
+/* 左侧区域 */
+.preview-left {
+    display: flex;
+    flex-direction: column;
+    gap: 9mm;
+    margin-left: 20mm;  /* 与"芮光"左对齐 */
+}
+
+/* 产品图片区域 */
+.preview-image,
+.preview-diagram {
+    width: 90mm;  /* 进一步增加宽度 */
+    height: 90mm;  /* 进一步增加高度 */
+    border: 1px dashed #ddd;
+    cursor: pointer;
+    position: relative;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 产品线图特殊样式 */
+.preview-diagram {
+    height: 70mm;  /* 相应增加线图高度 */
+}
+
+/* 配件图片区域 */
+.accessories-container {
+    position: absolute;
+    bottom: 30mm;
+    left: 40mm;  /* 与产品图片左对齐 */
+    width: 70mm;
+}
+
+.accessories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8mm;
+}
+
+/* 配件图和配光曲线的容器样式 */
+.accessory-box,
+.curve-box {
+    width: 35mm;  /* 增加宽度 */
+    height: 35mm;  /* 增加高度 */
+    border: 1px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.accessory-box:hover {
+    border-color: #999;
+}
+
+/* 配光曲线区域 */
+.light-curves {
+    position: absolute;
+    bottom: 30mm;
+    left: 135mm;  /* 调整位置，使与参数名称左对齐 */
+    width: 70mm;
+}
+
+.curves-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8mm;  /* 增加间距，与配件图保持一致 */
+    width: 100%;
+}
+
+.curve-box:hover {
+    border-color: #999;
+}
+
+/* 只对配光曲线图应用黑白效果 */
+.curves-grid .curve-box img {
+    filter: grayscale(100%) !important;
+}
+
+/* 图片占位符样式优化 */
+.image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #999;
+    transition: all 0.2s ease;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.image-placeholder svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 10px;
+    transition: transform 0.2s ease;
+}
+
+.image-placeholder span {
+    font-size: 13px;
+    margin-bottom: 6px;
+    transition: color 0.2s ease;
+}
+
+.image-placeholder small {
+    font-size: 11px;
+    color: #bbb;
+    transition: color 0.2s ease;
+}
+
+/* 悬停效果 */
+.preview-image:hover .image-placeholder,
+.preview-diagram:hover .image-placeholder,
+.accessory-box:hover .image-placeholder {
+    color: #4CAF50;
+}
+
+.preview-image:hover .image-placeholder svg,
+.preview-diagram:hover .image-placeholder svg,
+.accessory-box:hover .image-placeholder svg,
+.curve-box:hover .image-placeholder svg {
+    transform: scale(1.1);
+    fill: #4CAF50;
+}
+
+.preview-image:hover .image-placeholder small,
+.preview-diagram:hover .image-placeholder small,
+.accessory-box:hover .image-placeholder small,
+.curve-box:hover .image-placeholder small {
+    color: #999;
+}
+
+/* 统一所有图片上传区域的样式 */
+.image-placeholder svg {
+    margin-bottom: 8px;
+}
+
+.image-placeholder span {
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* 统一图片上传区域的交互效果 */
+.preview-image:hover,
+.preview-diagram:hover,
+.accessory-box:hover,
+.curve-box:hover {
+    border-color: #4CAF50;
+    background-color: #f9f9f9;
+}
+
+/* 图片容器内的图片样式 */
+.preview-image img,
+.preview-diagram img,
+.accessory-box img,
+.curve-box img {
+    max-width: 95%;  /* 缩小到95%确保不会挡住边框 */
+    max-height: 95%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    margin: auto;  /* 确保图片居中 */
+}
+
+/* 当容器有图片时的边框样式 */
+.preview-image:has(img:not([style*="display: none"])),
+.preview-diagram:has(img:not([style*="display: none"])),
+.accessory-box:has(img),
+.curve-box:has(img) {
+    border: 1px solid #666 !important;  /* 实线边框 */
+}
+
+/* 删除按钮样式 */
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background: #ff4444;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: none;
+    z-index: 999;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.delete-btn:hover {
+    opacity: 1;
+}
+
+/* 当容器有图片时显示删除按钮 */
+.preview-image:has(img[style*="display: block"]) .delete-btn,
+.preview-diagram:has(img[style*="display: block"]) .delete-btn,
+.accessory-box:has(img) .delete-btn,
+.curve-box:has(img) .delete-btn {
+    display: block;
+    opacity: 0;  /* 默认隐藏 */
+    transition: opacity 0.2s;
+}
+
+/* 鼠标悬停时显示删除按钮 */
+.preview-image:hover .delete-btn,
+.preview-diagram:hover .delete-btn,
+.accessory-box:hover .delete-btn,
+.curve-box:hover .delete-btn {
+    opacity: 0.8;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 图片上传区域交互优化 */
+.image-placeholder svg,
+.image-placeholder span {
+    transition: all 0.2s ease;
+}
+
+.preview-image:hover .image-placeholder svg,
+.preview-diagram:hover .image-placeholder svg,
+.accessory-box:hover .image-placeholder svg,
+.curve-box:hover .image-placeholder svg {
+    fill: #4CAF50;
+    transform: scale(1.1);
+}
+
+.preview-image:hover .image-placeholder span,
+.preview-diagram:hover .image-placeholder span,
+.accessory-box:hover .image-placeholder span,
+.curve-box:hover .image-placeholder span {
+    color: #4CAF50;
+}
+
+/* 页面加载动画 */
+@keyframes fadeInPage {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 图片加载动画 */
+.image-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4CAF50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* 优化输入框自动完成样式 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: #333;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 添加 Toast 提示样式 */
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-family: "Microsoft YaHei", sans-serif;
+}
+
+/* 添加输入框悬停效果 */
+.product-brand:hover,
+.product-model:hover,
+.product-description textarea:hover,
+.params-table input:hover {
+    border-color: #e0e0e0;
+    background-color: #fafafa;
+}
+
+/* 添加图片上传区域的过渡动画 */
+.preview-image,
+.preview-diagram,
+.accessory-box,
+.curve-box {
+    transition: all 0.3s ease;
+}
+
+/* 优化图片上传区域的悬停效果 */
+.preview-image:hover,
+.preview-diagram:hover,
+.accessory-box:hover,
+.curve-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 添加参数表格行的过渡动画 */
+.params-table tr {
+    transition: background-color 0.2s ease;
+}
+
+/* 优化打印按钮的过渡效果 */
+.print-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 添加页面载入动画 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.preview-page {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* 添加图片压缩进度条样式 */
+.compress-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: #4CAF50;
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+/* 优化图片加载时的占位效果 */
+.image-placeholder.loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+}
+
+/* 拖拽上传区域样式 */
+.drag-over {
+    border-color: #4CAF50 !important;
+    background-color: rgba(76, 175, 80, 0.05) !important;
+    position: relative;
+}
+
+.drag-over::after {
+    content: '释放鼠标上传图片';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10;
+}
+
+/* 页脚部分优化 */
+.preview-footer {
+    position: absolute;
+    bottom: 5mm;
+    left: 20mm;
+    right: 20mm;
+    padding: 10px 0 0;
+    font-size: 9px;
+    color: #666;
+    border-top: 1px solid #eee;
+    margin-bottom: 0;
+    width: 170mm;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 4mm;
+    line-height: 1.4;
+    font-family: "Microsoft YaHei", sans-serif;
+    letter-spacing: 0.2px;
+}
+
+.footer-section {
+    flex: 1;
+    max-width: 30%;
+    line-height: 1.6;
+    color: #555;
+    text-align: left;
+    padding: 0 10px;
+    cursor: text;
+    overflow: hidden;  /* 确保内容不会溢出 */
+}
+
+.footer-input {
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: inherit;
+    color: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    padding: 0;
+    margin: 0;
+    transition: border-color 0.2s;
+    white-space: nowrap;  /* 强制单行显示 */
+    overflow: hidden;     /* 隐藏超出部分 */
+    text-overflow: ellipsis;  /* 超出显示省略号 */
+}
+
+.footer-input:hover {
+    border-color: #e0e0e0;
+}
+
+.footer-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-section:last-child {
+    color: #888;
+    font-size: 8px;
+}
+
+/* 参数表格样式优化 */
+.params-table tr {
+    height: 24px;  /* 行高 */
+    margin-bottom: 6px;  /* 设置行间距为6px */
+    border-collapse: collapse;
+}
+
+.params-table td.param-name {
+    width: 95px;
+    color: #666;
+    font-size: 12px;
+    text-align: left;
+    font-family: "Microsoft YaHei", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    padding-right: 10px;
+}
+
+.params-table td.param-value {
+    width: auto;
+}
+
+.params-table input {
+    border: none;
+    padding: 4px 8px;
+    width: 100%;
+    font-size: 13px;
+    color: #333;
+    font-family: "Microsoft YaHei", sans-serif;
+    text-align: left;
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    letter-spacing: 0.2px;
+    font-weight: normal;
+}
+
+/* 输入框的占位符文字样式 */
+.params-table input::placeholder {
+    color: #999;  /* 保持占位符文字颜色较浅 */
+    font-size: 13px;
+    font-weight: normal;
+}
+
+/* 补充信息文本框样式 */
+.supplementary-info {
+    transition: min-height 0.2s;
+}
+
+.supplementary-info:focus {
+    min-height: 60px;  /* 获得焦点时增加高度 */
+}
+
+/* 补充信息名称编辑样式 */
+.param-name.editable {
+    cursor: text;
+    transition: background-color 0.2s;
+}
+
+.param-name.editable:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.param-name.editable:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 导出PDF按钮样式优化 */
+.print-btn {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    padding: 12px 24px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: "Microsoft YaHei", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.print-btn:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.print-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 添加PDF图标 */
+.print-btn::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* 右侧区域样式 */
+.preview-right {
+    width: 85mm;
+    margin-left: -10mm;  /* 使用负边距向左移动 */
+}

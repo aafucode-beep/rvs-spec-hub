@@ -1,0 +1,117 @@
+/* 打印样式 — 合并了原来三段 @media print 块
+   1) 隐藏空配光曲线框/打印按钮/未填的表行
+   2) 补充信息文本框打印时取消 resize
+   3) 隐藏 header/footer/print-btn 等
+   注：依赖 :has() 伪类，Safari < 15.4 不支持 */
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background: none;
+    }
+
+    .preview-page {
+        margin: 0;
+        padding: 20mm;
+        width: 210mm;
+        height: 297mm;
+        box-shadow: none;
+    }
+
+    /* 隐藏没有输入值的参数行 */
+    .params-table tr:has(input:not([value]), input[value=""]) {
+        display: none !important;
+    }
+
+    /* 移除输入框样式 */
+    .params-table input {
+        border: none;
+        padding: 0;
+        background: none;
+    }
+
+    /* 固定配件图位置 */
+    .accessories-container {
+        position: fixed !important;
+        bottom: 30mm !important;
+        left: 40mm !important;  /* 与网页显示时相同 */
+        width: 70mm !important;
+    }
+
+    /* 固定配光曲线位置 */
+    .light-curves {
+        position: fixed !important;
+        bottom: 30mm !important;
+        left: 135mm !important;  /* 与网页显示时相同 */
+        width: 70mm !important;
+    }
+
+    /* 固定页脚位置 */
+    .preview-footer {
+        position: fixed !important;
+        bottom: 5mm !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 170mm !important;
+    }
+
+    @page {
+        size: 210mm 297mm;
+        margin: 0;
+    }
+
+    .print-btn {
+        display: none !important;
+    }
+
+    /* 隐藏没有图片的容器和删除按钮 */
+    .preview-image:not(:has(img[style*="display: block"])),
+    .preview-diagram:not(:has(img[style*="display: block"])),
+    .accessory-box:not(:has(img)),
+    .curve-box:not(:has(img)),
+    .delete-btn {
+        display: none !important;
+    }
+
+    /* 补充信息文本框打印时取消 resize */
+    .supplementary-info {
+        resize: none;
+        overflow: hidden;
+        height: auto !important;
+    }
+
+    /* 隐藏不需要打印的元素（合并自原第二段） */
+    .header, .footer, .print-btn, .delete-btn, .upload-placeholder {
+        display: none !important;
+    }
+
+    /* 确保图片按照正确的顺序排列 */
+    .accessory-box img[data-accessory-index],
+    .curve-box img[data-curve-index] {
+        display: block !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+    }
+
+    /* 确保页面布局正确 */
+    body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 确保表格正确显示 */
+    table {
+        width: 100% !important;
+        page-break-inside: avoid;
+    }
+
+    /* 确保文本正确显示 */
+    .editable {
+        border: none !important;
+        background: transparent !important;
+    }
+}

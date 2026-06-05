@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>产品规格书生成器</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/spec-editor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+</head>
+<body>
+    <div class="preview-page">
+        <div class="preview-header">
+            <div class="title-area">
+                <input type="text" class="header-input brand" value="芮光" data-i18n="brand">
+                <input type="text" class="header-input" value="产品系列  " data-i18n="product-series">
+                <input type="text" class="header-input" value="产品描述  " data-i18n="product-desc">
+            </div>
+            <div class="logo-area" onclick="uploadLogo()">
+                <input type="file" id="logoInput" accept="image/*">
+                <img id="logoImage" src="{{ url_for('static', filename='images/logo.png') }}" alt="RVS Lighting" data-i18n="logo-alt">
+            </div>
+        </div>
+
+        <div class="preview-content">
+            <div class="preview-left">
+                <div class="preview-image" onclick="document.getElementById('productImage').click()">
+                    <input type="file" id="productImage" accept="image/*" style="display: none;">
+                    <div class="image-placeholder">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#ccc">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <span>点击上传产品图片</span>
+                        <small>建议尺寸: 900×900px</small>
+                    </div>
+                    <img id="previewImage" src="" style="display: none;">
+                </div>
+                <div class="preview-diagram" onclick="document.getElementById('productDiagram').click()">
+                    <input type="file" id="productDiagram" accept="image/*" style="display: none;">
+                    <div class="image-placeholder">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#ccc">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <span data-i18n="upload-diagram">点击上传产品线图</span>
+                        <small data-i18n="size-hint-diagram">建议尺寸: 800×600px</small>
+                    </div>
+                    <img id="diagramPreview" src="" style="display: none;">
+                </div>
+                <div class="accessories-container">
+                    <div class="accessories-grid">
+                        <div class="accessory-box" data-index="0">
+                            <div class="image-placeholder">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                </svg>
+                                <span>配件图1</span>
+                            </div>
+                        </div>
+                        <div class="accessory-box" data-index="1">
+                            <div class="image-placeholder">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                </svg>
+                                <span>配件图2</span>
+                            </div>
+                        </div>
+                        <div class="accessory-box" data-index="2">
+                            <div class="image-placeholder">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                </svg>
+                                <span>配件图3</span>
+                            </div>
+                        </div>
+                        <div class="accessory-box" data-index="3">
+                            <div class="image-placeholder">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                </svg>
+                                <span>配件图4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-right">
+                <table class="params-table">
+                    <tr>
+                        <td class="param-name" data-i18n="cut-out-size">开孔尺寸</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入开孔尺寸" data-unit="mm" data-i18n="input-cut-out-size">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="ceiling-thickness">适用天花厚度</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入天花厚度" data-unit="mm" data-i18n="input-ceiling-thickness">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="power">功率</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入功率" data-unit="W" data-i18n="input-power">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="luminous-flux">光通量</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入光通量" data-unit="lm" data-i18n="input-luminous-flux">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="beam-angle">光束角</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入光束角" data-unit="°" data-i18n="input-beam-angle">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="beam-pattern">光斑风格</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入光斑风格" data-i18n="input-beam-pattern">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="cct">色温</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入色温" data-unit="K" data-i18n="input-cct">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="cri">显色指数Ra</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入显色指数" data-i18n="input-cri">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="tlci-rf">色彩保真度Rf</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入色彩保真度" data-i18n="input-tlci-rf">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="tlci-rg">色彩饱和度Rg</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入色彩饱和度" data-i18n="input-tlci-rg">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="sdcm">色容差SDCM</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入色容差" data-i18n="input-sdcm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="control">控制方式</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入控制方式" data-i18n="input-control">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="appearance-color">外观颜色</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入外观颜色" data-i18n="input-appearance-color">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="reflector-color">反射器颜色</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入反射器颜色" data-i18n="input-reflector-color">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="input-signal">输入信号</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入信号" data-i18n="input-signal-placeholder">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="ip-rating">防护等级</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入防护等级" data-i18n="input-ip-rating">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name" data-i18n="material">材质</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入材质" data-i18n="input-material">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name editable" contenteditable="true" data-i18n="additional-info">补充信息</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入补充信息" data-i18n="input-additional-info">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name editable" contenteditable="true" data-i18n="additional-info-2">补充信息2</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入补充信息2" data-i18n="input-additional-info-2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name editable" contenteditable="true" data-i18n="additional-info-3">补充信息3</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入补充信息3" data-i18n="input-additional-info-3">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name editable" contenteditable="true" data-i18n="additional-info-4">补充信息4</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入补充信息4" data-i18n="input-additional-info-4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="param-name editable" contenteditable="true" data-i18n="additional-info-5">补充信息5</td>
+                        <td class="param-value">
+                            <input type="text" placeholder="输入补充信息5" data-i18n="input-additional-info-5">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="light-curves">
+            <div class="curves-grid">
+                <div class="curve-box" data-index="0">
+                    <div class="image-placeholder">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <span data-i18n="curve-1">配光曲线1</span>
+                    </div>
+                </div>
+                <div class="curve-box" data-index="1">
+                    <div class="image-placeholder">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <span data-i18n="curve-2">配光曲线2</span>
+                    </div>
+                </div>
+                <div class="curve-box" data-index="2">
+                    <div class="image-placeholder">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <span data-i18n="curve-3">配光曲线3</span>
+                    </div>
+                </div>
+                <div class="curve-box" data-index="3">
+                    <div class="image-placeholder">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <span data-i18n="curve-4">配光曲线4</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <input type="text" class="footer-input" value="www.rvs-lighting.com"><br>
+                    <input type="text" class="footer-input" value="上海芮维溪智能科技有限公司" data-i18n="company-name">
+                </div>
+                <div class="footer-section">
+                    <input type="text" class="footer-input" value="sales@rvs-lighting.com"><br>
+                    <input type="text" class="footer-input" value="上海市黄浦区巨鹿路417号701室" data-i18n="address-sh"><br>
+                    <input type="text" class="footer-input" value="深圳市南山区南山云谷南风楼A座405室" data-i18n="address-sz">
+                </div>
+                <div class="footer-section">
+                    <input type="text" class="footer-input" value="芮光保留对产品进行不定期设计更新的权利" data-i18n="rights"><br>
+                    <input type="text" class="footer-input" value="2025.2">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="window.print()" class="print-btn" data-i18n="export-btn">导出规格书</button>
+
+    <script src="{{ url_for('static', filename='js/image.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
